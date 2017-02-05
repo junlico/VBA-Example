@@ -5,15 +5,22 @@ Function warshipNum() As Integer
 End Function
 
 Function LWarshipNum() As Integer
-    LWarshipNum = Sheet2.Range("A30:A" & warshipNum).find(1004, LookIn:=xlValues, LookAt:=xlWhole).Row - 1
+    Dim Rng As Range
+    For Each cell In Sheet2.Range("A30:A" & warshipNum)
+        If cell.Value > 1000 Then
+            LWarshipNum = cell.Row - 1
+            Exit Function
+        End If
+    Next cell
 End Function
 
 Function UWarshipNum() As Integer
     UWarshipNum = warshipNum - LWarshipNum
 End Function
 
-Function getWarshipName(ByVal i As Integer) As String
-    getWarshipName = Sheet2.Cells(i, "B").Value
+Function getWarshipName(ByVal r As Integer) As String
+    If r = 0 Or r = 1 Then Exit Function
+    getWarshipName = Sheet2.Cells(r, "B").Value
 End Function
 
 Function getAC(ByVal r As Integer) As Variant
