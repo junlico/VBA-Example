@@ -150,6 +150,8 @@ Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
     With Sheet1
     Set team = .Range("K2:K7")
     If chk Then
+        Set lookUp = team.find(r, LookIn:=xlValues, LookAt:=xlWhole)
+        If Not lookUp Is Nothing Then Exit Function
         For Each cell In team
             If cell.Value = vbNullString Then
                 i = cell.Row - 1
