@@ -135,9 +135,8 @@ done:
 End Sub
 
 Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
-	Application.ScreenUpdating = False
-    Dim team As Range, cell As Range, lookUp As Range
-    Dim i As Integer
+    Application.ScreenUpdating = False
+    Dim team As Range, AC As Range, cell As Range, lookUp As Range
     editFromList = False
     With Sheet1
     Set team = .Range("K2:K7")
@@ -149,11 +148,11 @@ Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
         End If
         For Each cell In team
             If cell.Value = vbNullString Then
-                i = cell.Row - 1
                 cell.Value = r
                 cell.Offset(0, 1).Value = True
-                .OLEObjects("CheckBox" & i).Object.Caption = getWarshipName(r)
-                .OLEObjects("CheckBox" & i).Visible = True
+                .Range("N" & cell.Row & ":Q" & cell.Row).Value = getAC(r)
+                .OLEObjects("CheckBox" & cell.Row - 1).Object.Caption = getWarshipName(r)
+                .OLEObjects("CheckBox" & cell.Row - 1).Visible = True
                 editFromList = True
                 Exit Function
             End If
@@ -163,17 +162,16 @@ Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
         For Each cell In team
             Set lookUp = team.find(r, LookIn:=xlValues, LookAt:=xlWhole)
             If Not lookUp Is Nothing Then
-                i = lookUp.Row - 1
-                lookUp.ClearContents
+                .Range("K" & lookUp.Row & ":Q" & lookUp.Row).ClearContents
                 lookUp.Offset(0, 1).Value = False
-                .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
-                .OLEObjects("CheckBox" & i).Visible = False
+                .OLEObjects("CheckBox" & lookUp.Row - 1).Object.Caption = vbNullString
+                .OLEObjects("CheckBox" & lookUp.Row - 1).Visible = False
                 Exit Function
             End If
         Next cell
     End If
     End With
-	Application.ScreenUpdating = True
+    Application.ScreenUpdating = True
 End Function
 
 Sub editFromTeam(ByVal r As Integer)
