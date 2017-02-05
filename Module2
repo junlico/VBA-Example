@@ -11,11 +11,38 @@ Sub updateWarshipList()
     
     i = teamMember + 1
     If .Range("B1").Value = vbNullString Then
-    
+        For Each cell in Rng
+            cell.value = i - 5
+            .OLEObjects("CheckBox" & i).Object.Caption = getWarshipName(i - 5)
+            .OLEObjects("CheckBox" & i).Visible = True
+            i = i + 1
+        Next cell
     ElseIf .Range("B1").Value = "-" Then
-    
+        For Each cell in LRng
+            cell.value = i - 5
+            .OLEObjects("CheckBox" & i).Object.Caption = getWarshipName(i - 5)
+            .OLEObjects("CheckBox" & i).Visible = True
+            i = i + 1
+        Next Cell
+
+        For Each cell in RRng
+            .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+            .OLEObjects("CheckBox" & i).Visible = False
+            i = i + 1 
+        Next cell
     ElseIf .Range("B1").Value = "+" Then
-    
+        For Each cell in LRng
+            .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+            .OLEObjects("CheckBox" & i).Visible = False
+            i = i + 1
+        Next Cell
+
+        For Each cell in RRng
+            cell.value = i - 5
+            .OLEObjects("CheckBox" & i).Object.Caption = getWarshipName(i - 5)
+            .OLEObjects("CheckBox" & i).Visible = True
+            i = i + 1 
+        Next cell
     Else
         With Sheet2.Range("H2:H" & warshipNum)
         Set lookUp = .find(Range("B1").Value, LookIn:= xlValues, LookAt:= xlPart)
@@ -30,7 +57,7 @@ Sub updateWarshipList()
                 i = i + 1
                 Set lookUp = .FindNext(lookUp)
                 If lookUp Is Nothing Then GoTo done
-                Loop While Not lookUp Is Nothing And lookUp.Address <> addr
+            Loop While Not lookUp Is Nothing And lookUp.Address <> addr
         End If
         End With
 done:
