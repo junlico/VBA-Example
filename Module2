@@ -1,0 +1,50 @@
+Sub updateWarshipList()
+    Dim LRng as Range, RRng as Range, Rng as Range, team as Range, cell as Range, lookUp as Range
+    Dim i as Integer
+    Dim addr as String
+    With Sheet1
+    Set LRng = .Range("D2:D" & LWarshipNum)
+    Set RRng = .Range("G2:G" & UWarshipNum + 1)
+    Set Rng = .Range("D2:D" & LWarshipNum & ", G2:G" & UWarshipNum + 1)
+    Rng.ClearContents
+    Rng.Offset(0, 1).Value = False
+    
+    i = teamMember + 1
+    If .Range("B1").Value = vbNullString Then
+    
+    ElseIf .Range("B1").Value = "-" Then
+    
+    ElseIf .Range("B1").Value = "+" Then
+    
+    Else
+        With Sheet2.Range("H2:H" & warshipNum)
+        Set lookUp = .find(Range("B1").Value, LookIn:= xlValues, LookAt:= xlPart)
+        If Not lookUp Is Nothing Then
+            addr = lookUp.Address
+            Do
+                LRng(i - teamMember).Value = lookUp.Row
+                With Sheet1.
+                .OLEObjects("CheckBox" & i).Object.Caption = lookUp.Offset(0, -6).Value
+                .OLEObjects("CheckBox" & i).Visible = True
+                End With
+                i = i + 1
+                Set lookUp = .FindNext(lookUp)
+                If lookUp Is Nothing Then GoTo done
+                Loop While Not lookUp Is Nothing And lookUp.Address <> addr
+        End If
+        End With
+done:
+        Dim temp as Range
+        .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+        .OLEObjects("CheckBox" & i).Visible = False        
+    End If
+    
+    Set team = .Range("K2:K7")
+    For Each cell in team
+        If cell.Value <> 0 Then
+            Set lookUp = Rng.find(cell.Value, LookIn:=xlValues, LookAt:=xlWhole)
+            If Not lookUp Is Nothing Then lookUp.Offset(0, 1).Value = True
+        End If
+    Next cell
+    End With
+End Sub
