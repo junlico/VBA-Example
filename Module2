@@ -1,3 +1,65 @@
+Sub addDesignButton()
+    Dim cell As Range
+    Dim i As Integer
+	With ActiveSheet
+    For i = 0 To 4
+        Set cell = .Range("T" & 12 + 3 * i)
+        .OLEObjects.add "Forms.CommandButton.1", Left:=cell.Left, Top:=cell.Top, Width:=2 * cell.Width, Height:=2 * cell.Height
+    Next i
+	End With
+End Sub
+
+Sub changeButtonName()
+    CommandButton1.Caption = "Clear All"
+    CommandButton2.Caption = "Update Checkbox"
+    CommandButton3.Caption = "Update Team"
+    CommandButton4.Caption = "Add Checkbox"
+    CommandButton5.Caption = "Delete Checkbox"
+End Sub
+
+Sub deleteObject()
+    Application.ScreenUpdating = False
+    Dim obj As OLEObject
+    For Each obj In ActiveSheet.OLEObjects
+        obj.Delete
+    Next obj
+    Application.ScreenUpdating = True
+End Sub
+
+Sub addCheckBox()
+    Application.ScreenUpdating = False
+    Dim Rng As Range, valRng As Range, cell As Range
+    Dim i As Integer   
+    With ActiveSheet
+        Set Rng = .Range("J2:J" & teamMember + 1 & ", C2:C" & LWarshipNum & ", F2:F" & UWarshipNum + 1)
+        Rng.Offset(0, 2).Value = False
+        i = 1
+        For Each cell In Rng
+            .OLEObjects.add "Forms.CheckBox.1", Left:=cell.Left, Top:=cell.Top + 1, Width:=cell.Width, Height:=cell.Height - 1
+            .OLEObjects("CheckBox" & i).LinkedCell = cell.Offset(0, 2).Address
+            .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+            .OLEObjects("CheckBox" & i).Visible = False
+            i = i + 1
+        Next cell
+    End With
+    Application.ScreenUpdating = True
+End Sub
+
+Sub deleteCheckBox()
+    Application.ScreenUpdating = False
+    Dim obj As OLEObject
+    With ActiveSheet
+    For Each obj In .OLEObjects
+        If obj.progID = "Forms.CheckBox.1" Then obj.Delete
+    Next obj
+    
+    Dim Rng As Range
+    Set Rng = .Range("K2:U" & teamMember + 1 & ", D2:E" & LWarshipNum & ", G2:H" & UWarshipNum + 1)
+    Rng.ClearContents
+    End With
+	Application.ScreenUpdating = True
+End Sub
+
 Sub updateWarshipList()
     Dim LRng as Range, RRng as Range, Rng as Range, team as Range, cell as Range, lookUp as Range
     Dim i as Integer
