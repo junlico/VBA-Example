@@ -1,9 +1,48 @@
 Public Const teamMember = 6
 
-Function warshipNum() as Integer
-	warshipNum = Sheet2.Cells(Sheet2.Rows.Count, "A").End(xlUp).Row
+Function warshipNum() As Integer
+    warshipNum = Sheet2.Cells(Sheet2.Rows.Count, "A").End(xlUp).Row
 End Function
 
-Function LWarshipNum() as Integer
-	LWarshipNum = Sheet2.Range("A30:A" & warshipNum).find(1004, LookIn:= xlValues, LookAt:= xlWhole).Row - 1
+Function LWarshipNum() As Integer
+    LWarshipNum = Sheet2.Range("A30:A" & warshipNum).find(1004, LookIn:=xlValues, LookAt:=xlWhole).Row - 1
+End Function
+
+Function UWarshipNum() As Integer
+    UWarshipNum = warshipNum - LWarshipNum
+End Function
+
+Function getWarshipName(ByVal i As Integer) As String
+    getWarshipName = Sheet2.Cells(i, "B").Value
+End Function
+
+Function getAC(ByVal r As Integer) As Variant
+    If r = 0 Or r = 1 Then Exit Function
+    getAC = Sheet2.Range("D" & r & ":G" & r).Value
+End Function
+
+Function calAS(ByVal num As Integer, rng1 As Range, rng2 As Range) As Double
+    Dim cell As Range
+    Dim i As Integer
+    calAS = 0
+    For i = 1 To rng1.Cells.Count
+        calAS = calAS + Log(2 * (WorksheetFunction.Min(num, rng1.Cells(i).Value) + 1)) * _
+                rng2.Cells(i).Value
+    Next i
+End Function
+
+Function calMapAS(Rng As Range) As Double
+    Application.ScreenUpdating = False
+    Dim cell As Range, lookUp As Range, list As Range
+    calMapAS = 0
+    With Sheet3
+        Set list = .Range("A2:A" & .Cells(.Rows.Count, "A").End(xlUp).Row)
+        For Each cell In Rng
+            If Not cell.Value = vbNullString Then
+                Set lookUp = list.find(cell.Value, LookIn:=xlValues, LookAt:=xlWhole)
+                If Not lookUp Is Nothing Then calMapAS = calMapAS + .Cells(lookUp.Row, "M").Value
+            End If
+        Next cell
+    End With
+    Application.ScreenUpdating = True
 End Function
