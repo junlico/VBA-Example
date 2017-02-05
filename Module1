@@ -1,0 +1,9 @@
+Public Const teamMember = 6
+
+Function warshipNum() as Integer
+	warshipNum = Sheet2.Cells(Sheet2.Rows.Count, "A").End(xlUp).Row
+End Function
+
+Function LWarshipNum() as Integer
+	LWarshipNum = Sheet2.Range("A30:A" & warshipNum).find(1004, LookIn:= xlValues, LookAt:= xlWhole).Row - 1
+End Function
