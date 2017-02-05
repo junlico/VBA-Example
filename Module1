@@ -22,12 +22,10 @@ Function getAC(ByVal r As Integer) As Variant
 End Function
 
 Function calAS(ByVal num As Integer, rng1 As Range, rng2 As Range) As Double
-    Dim cell As Range
     Dim i As Integer
     calAS = 0
     For i = 1 To rng1.Cells.Count
-        calAS = calAS + Log(2 * (WorksheetFunction.Min(num, rng1.Cells(i).Value) + 1)) * _
-                rng2.Cells(i).Value
+        calAS = calAS + Log(2 * (WorksheetFunction.Min(num, rng1.Cells(i).Value) + 1)) * rng2.Cells(i).Value
     Next i
 End Function
 
