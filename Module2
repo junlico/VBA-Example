@@ -61,6 +61,7 @@ Sub deleteCheckBox()
 End Sub
 
 Sub updateWarshipList()
+	Application.ScreenUpdating = False
     Dim LRng as Range, RRng as Range, Rng as Range, team as Range, cell as Range, lookUp as Range
     Dim i as Integer
     Dim addr as String
@@ -138,9 +139,11 @@ done:
         End If
     Next cell
     End With
+	Application.ScreenUpdating = True
 End Sub
 
 Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
+	Application.ScreenUpdating = False
     Dim team As Range, cell As Range, lookUp As Range
     Dim i As Integer
     editFromList = False
@@ -173,14 +176,17 @@ Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
         Next cell
     End If
     End With
+	Application.ScreenUpdating = True
 End Function
 
 Sub editFromTeam(ByVal r As Integer)
+	Application.ScreenUpdating = False
     Dim Rng As Range, cell As Range
     Dim i As Integer
     Dim result as Boolean
     result = editFromList(r, False)
     Set cell = Sheet1.Range("D2:D" & LWarshipNum & ", G2:G" & UWarshipNum + 1).find(r, LookIn:=xlValues, LookAt:=xlWhole)
     If Not cell Is Nothing Then cell.Offset(0, 1).Value = result
+	Application.ScreenUpdating = True
 End Sub
 
