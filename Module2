@@ -50,7 +50,7 @@ Sub updateWarshipList()
             addr = lookUp.Address
             Do
                 LRng(i - teamMember).Value = lookUp.Row
-                With Sheet1.
+                With Sheet1
                 .OLEObjects("CheckBox" & i).Object.Caption = lookUp.Offset(0, -6).Value
                 .OLEObjects("CheckBox" & i).Visible = True
                 End With
@@ -77,3 +77,48 @@ done:
     Next cell
     End With
 End Sub
+
+Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
+    Dim team As Range, cell As Range, lookUp As Range
+    Dim i As Integer
+    editFromList = False
+    With Sheet1
+    Set team = .Range("K2:K7")
+    If chk Then
+        For Each cell In team
+            If cell.Value = vbNullString Then
+                i = cell.Row - 1
+                cell.Value = r
+                cell.Offset(0, 1).Value = True
+                .OLEObjects("CheckBox" & i).Object.Caption = getWarshipName(r)
+                .OLEObjects("CheckBox" & i).Visible = True
+                editFromList = True
+                Exit Function
+            End If
+        Next cell
+        MsgBox "have been selected 6 warships"
+    Else
+        For Each cell In team
+            Set lookUp = team.find(r, LookIn:=xlValues, LookAt:=xlWhole)
+            If Not lookUp Is Nothing Then
+                i = lookUp.Row - 1
+                lookUp.ClearContents
+                lookUp.Offset(0, 1).Value = False
+                .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+                .OLEObjects("CheckBox" & i).Visible = False
+                Exit Function
+            End If
+        Next cell
+    End If
+    End With
+End Function
+
+Sub editFromTeam(ByVal r As Integer)
+    Dim Rng As Range, cell As Range
+    Dim i As Integer
+    Dim result as Boolean
+    result = editFromList(r, False)
+    Set cell = Sheet1.Range("D2:D" & LWarshipNum & ", G2:G" & UWarshipNum + 1).find(r, LookIn:=xlValues, LookAt:=xlWhole)
+    If Not cell Is Nothing Then cell.Offset(0, 1).Value = result
+End Sub
+
