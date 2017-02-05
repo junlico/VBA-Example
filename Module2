@@ -9,14 +9,6 @@ Sub addDesignButton()
 	End With
 End Sub
 
-Sub changeButtonName()
-    CommandButton1.Caption = "Clear All"
-    CommandButton2.Caption = "Update Checkbox"
-    CommandButton3.Caption = "Update Team"
-    CommandButton4.Caption = "Add Checkbox"
-    CommandButton5.Caption = "Delete Checkbox"
-End Sub
-
 Sub deleteObject()
     Application.ScreenUpdating = False
     Dim obj As OLEObject
@@ -28,7 +20,7 @@ End Sub
 
 Sub addCheckBox()
     Application.ScreenUpdating = False
-    Dim Rng As Range, valRng As Range, cell As Range
+    Dim Rng As Range, cell As Range
     Dim i As Integer   
     With ActiveSheet
         Set Rng = .Range("J2:J" & teamMember + 1 & ", C2:C" & LWarshipNum & ", F2:F" & UWarshipNum + 1)
@@ -151,7 +143,10 @@ Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
     Set team = .Range("K2:K7")
     If chk Then
         Set lookUp = team.find(r, LookIn:=xlValues, LookAt:=xlWhole)
-        If Not lookUp Is Nothing Then Exit Function
+        If Not lookUp Is Nothing Then
+            editFromList = True
+            Exit Function
+        End If
         For Each cell In team
             If cell.Value = vbNullString Then
                 i = cell.Row - 1
