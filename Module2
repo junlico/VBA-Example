@@ -34,9 +34,11 @@ Sub updateWarshipList()
         End If
         End With
 done:
-        Dim temp as Range
-        .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
-        .OLEObjects("CheckBox" & i).Visible = False        
+        Do While i < teamMember + warshipNum
+            .OLEObjects("CheckBox" & i).Object.Caption = vbNullString
+            .OLEObjects("CheckBox" & i).Visible = False    
+            i = i + 1
+        Loop
     End If
     
     Set team = .Range("K2:K7")
