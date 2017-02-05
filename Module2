@@ -136,7 +136,7 @@ End Sub
 
 Function editFromList(ByVal r As Integer, chk As Boolean) As Boolean
     Application.ScreenUpdating = False
-    Dim team As Range, AC As Range, cell As Range, lookUp As Range
+    Dim team As Range, cell As Range, lookUp As Range
     editFromList = False
     With Sheet1
     Set team = .Range("K2:K7")
