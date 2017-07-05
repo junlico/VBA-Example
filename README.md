@@ -1,3 +1,3 @@
-# WarshipGirl
+# Warship
 
 Excel VBA example
